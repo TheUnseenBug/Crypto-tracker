@@ -1,17 +1,53 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import ReactDOM from 'react-dom';
-import './index.css';
-import App from './App';
-import reportWebVitals from './reportWebVitals';
+import axios from 'axios';
+import Coin from './Coin';
 
-ReactDOM.render(
-  <React.StrictMode>
-    <App />
-  </React.StrictMode>,
-  document.getElementById('root')
-);
+function App() {
+	const [coins, setCoins] = useState([]);
+	const [search, setSearch] = useState('');
 
-// If you want to start measuring performance in your app, pass a function
-// to log results (for example: reportWebVitals(console.log))
-// or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
-reportWebVitals();
+	useEffect(() => {
+		axios
+			.get(
+				'https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&ids=bitcoin%2C%20ethereum%2C%20hedera-hashgraph%2C%20polkadot%2C%20solana%2C%20fantom%2C%20terra-luna%2C%20%20liquiddriver%2C%20tethys%2C%20scream%2C%20beethoven-x%2C%20spookyswap%2C%20tomb-shares&order=market_cap_desc%20gecko_desc%2C%20gecko_asc%2C&per_page=100&page=1&sparkline=false&price_change_percentage=1h%2C24h%2C7d%2C%2030d%2C%2060d%2C%201y'
+			)
+			.then((res) => {
+				setCoins(res.data);
+				console.log(res.data);
+			})
+			.catch((error) => console.log(error));
+	}, []);
+
+	const handleChange = (e) => {
+		setSearch(e.target.value);
+	};
+
+	const filteredCoins = coins.filter((coin) => coin.name.toLowerCase().includes(search.toLowerCase()));
+
+	return (
+		<div className="coin-app">
+			<div className="coin-search" />
+			<h1 className="coin-text">Search a currency</h1>
+			<form>
+				<input className="coin-input" type="text" onChange={handleChange} placeholder="Search" />
+			</form>
+
+			{filteredCoins.map((coin) => {
+				return (
+					<Coin
+						key={coin.id}
+						name={coin.name}
+						price={coin.current_price}
+						volume={coin.market_cap}
+						image={coin.image}
+						priceChange={coin.price_change_percentage_24h}
+						marketCap={coin.market_cap}
+					/>
+				);
+			})}
+		</div>
+	);
+}
+
+ReactDOM.render(<App />, document.querySelector('#root'));
