@@ -7,10 +7,12 @@ const Coin = ({ name, image, symbol, price, volume, priceChange, marketCap }) =>
 			<div className="coinRow">
 				<div className="coin">
 					<img src={image} alt="crypto" />
-					<h1>{name}</h1>
-					<p className="coinSymbol">{symbol}</p>
 				</div>
 				<div className="coinData">
+					<a className="coin_name" href={`/${name}`}>
+						{name}
+					</a>
+					<p className="coinSymbol">{symbol}</p>
 					<p className="coinPrice">${price.toLocaleString()}</p>
 					<p className="coinVolume">${volume.toLocaleString()}</p>
 					{priceChange < 0 ? (
