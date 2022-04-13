@@ -47,6 +47,7 @@ body {
 	width: 100px;
 	height: 100px;
 }
+
 .coinContainer {
 	display: flex;
 	align-items: center;
@@ -55,10 +56,6 @@ body {
 
 .coin-input::placeholder {
 	color: #c1bfbd;
-}
-
-html {
-	height: 100%;
 }
 
 @media screen and (max-height: 700px) {
